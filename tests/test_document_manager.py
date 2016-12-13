@@ -1,4 +1,5 @@
 import unittest
+from documents.document_manager import DocumentManager
 
 
 class TestDocumentManager(unittest.TestCase):

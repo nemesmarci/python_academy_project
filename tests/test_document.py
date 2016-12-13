@@ -1,10 +1,17 @@
 import unittest
-
-from documents import Document
+from documents.document import Document
 
 
 class TestDocument(unittest.TestCase):
     """Test the document class"""
+
+    @unittest.expectedFailure
+    def test_creation_bad_format(self):
+        document = Document('title1', 'desc1', 'author1', ['1.pdf', '2.pdf'], 'bat')
+
+    @unittest.expectedFailure
+    def test_creation_no_title(selfs):
+        document = Document('', 'desc1', 'author1', ['1.pdf', '2.pdf'], 'pdf')
 
     def test_creation(self):
         document = Document('title1', 'desc1', 'author1', ['1.pdf', '2.pdf'], 'pdf')
