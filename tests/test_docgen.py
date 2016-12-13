@@ -1,6 +1,6 @@
 import unittest
 from docgen.generator import DocumentGenerator
-from os import remove
+import os
 
 
 class TestGenerator(unittest.TestCase):
@@ -14,6 +14,5 @@ class TestGenerator(unittest.TestCase):
         self.assertTrue(metadata['filename'])
         self.assertTrue(metadata['title'])
         self.assertTrue(metadata['description'])
-        with open('/tmp/{}'.format(metadata['filename'])) as f:
-            self.assertTrue(f)
-        remove('/tmp/{}'.format(metadata['filename']))
+        self.assertTrue(os.path.exists('/tmp/{}'.format(metadata['filename'])))
+        os.remove('/tmp/{}'.format(metadata['filename']))
