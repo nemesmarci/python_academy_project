@@ -1,6 +1,8 @@
 #
 # Write data to an ini file
 #
+
+
 def write_ini_file(filename, data):
     with open(filename, 'w') as ini_file:
         for section, properties in data.items():

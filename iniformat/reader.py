@@ -1,11 +1,13 @@
 #
 # Read data from an ini file.
 #
-# - The ini file can contains sections and properties.
+# - The ini file can contain sections and properties.
 # - The section and property names are arbitrary without restrictions.
-# - The section denoted by leading [ and trailing ] as the first non-whitespace characters.
+# - The section is denoted by leading [ and trailing ] as the first non-whitespace characters.
 # - The duplicated section or property definition causes error.
 #
+
+
 def read_ini_file(path):
     content = {}
     section_name = ''
@@ -42,6 +44,6 @@ def get_property(line):
     if len(splitted) == 2:
         key = splitted[0].strip()
         value = splitted[1].strip()
-        return (key, value)
+        return key, value
     else:
         raise ValueError('Invalid property line!')

@@ -1,5 +1,6 @@
 from documents.document import Document
 
+
 class DocumentManager(object):
     """Manage documents"""
 
