@@ -9,6 +9,8 @@ class TestRoleManager(unittest.TestCase):
     """Test the review manager class"""
 
     def __init__(self, *args, **kwargs):
+        if not os.path.exists('/tmp/repo1'):
+            os.makedirs('/tmp/repo1')
         super(TestRoleManager, self).__init__(*args, **kwargs)
         self.test_role_manager = RoleManager('/tmp/repo1/roles.txt')
 

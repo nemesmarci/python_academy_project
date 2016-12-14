@@ -2,12 +2,12 @@
 
 The repository is in a dedicated directory. This directory contains the following subdirectories by default:
 
-    documents/  - document data and metadata files
-    logs/       - logs of the repository events
-    projects/   - project files
-    users/      - user metadata files
-    paths.ini   - the path of the main parts of the repository
-    roles.txt   - user roles
+    documents/        - document data and metadata files
+    logs/             - logs of the repository events
+    projects/         - project files
+    users/            - user metadata files
+    paths.ini         - the path of the main parts of the repository
+    users/roles.txt   - user roles
 
 The documents directory contains subdirectories which name is the document identifier.
 
@@ -15,7 +15,7 @@ For document metadata we save them to text files with the same name and .info ex
 
 The paths.ini file contains the (relative or absolute) paths of mentioned subdirectories.
 
-The roles.txt contains the user names and the list of assigned roles.
+The roles.txt contains the user ids and the list of assigned roles.
 """
 
 from datetime import datetime

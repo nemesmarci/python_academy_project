@@ -12,19 +12,13 @@ class TestUserRoles(unittest.TestCase):
     def setUp(self):
         os.makedirs('/tmp/edms/users')
         self._user_manager = UserManager('/tmp/edms/users')
-        self._role_path = '/tmp/edms/roles.txt'
+        self._role_path = '/tmp/edms/users/roles.txt'
 
     def tearDown(self):
         shutil.rmtree('/tmp/edms')
 
     def test_create_new_role_file(self):
-        self._user_manager.set_role_file(self._role_path)
         self.assertTrue(os.path.exists(self._role_path))
-
-    def test_set_empty_role_file(self):
-        with open(self._role_path, 'w') as role_file:
-            os.utime(self._role_path, None)
-        self._user_manager.set_role_file(self._role_path)
 
     def test_check_empty_role_file(self):
         with open(self._role_path, 'w') as role_file:

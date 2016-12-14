@@ -68,7 +68,37 @@ class TestUserManager(unittest.TestCase):
         users = self.test_user_manager.find_users_by_name("User2")
         self.assertTrue(users[0].email == "user2@test.org")
 
+    def test7_check_role_file(self):
+        if os.path.exists('/tmp/users/role_files'):
+            rmtree('/tmp/users/role_files')
+        os.makedirs('/tmp/users/role_files')
+        rf_path = '/tmp/users/role_files/role_file'
+        with open(rf_path, 'w') as rf:
+            rf.write("0: admin\n")
+            rf.write(": admin\n")
+        self.assertRaises(ValueError,self.test_user_manager.check_role_file, rf_path)
+        with open(rf_path, 'w') as rf:
+            rf.write("0: admin\n")
+            rf.write("1 admin\n")
+        self.assertRaises(ValueError,self.test_user_manager.check_role_file, rf_path)
+        with open(rf_path, 'w') as rf:
+            rf.write("0: admin\n")
+            rf.write("1: auditor\n")
+        self.assertRaises(ValueError,self.test_user_manager.check_role_file, rf_path)
+        with open(rf_path, 'w') as rf:
+            rf.write("0: admin\n")
+            rf.write("1: admin,visitor,\n")
+        self.assertRaises(ValueError,self.test_user_manager.check_role_file, rf_path)
+        with open(rf_path, 'w') as rf:
+            rf.write("0: admin\n")
+            rf.write("0: visitor\n")
+        self.assertRaises(ValueError,self.test_user_manager.check_role_file, rf_path)
+        with open(rf_path, 'w') as rf:
+            rf.write("0: admin\n")
+            rf.write("1: admin,admin\n")
+        self.assertRaises(ValueError,self.test_user_manager.check_role_file, rf_path)
+
     @classmethod
     def tearDownClass(cls):
         if os.path.exists('/tmp/users'):
-            rmtree('/tmp/users')
+            pass#rmtree('/tmp/users')

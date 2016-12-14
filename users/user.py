@@ -29,6 +29,7 @@ class User(object):
         self.birth = birth
         self.email = email
         self.password = password
+        self.roles = []
 
     @property
     def first_name(self):
@@ -89,3 +90,11 @@ class User(object):
             self._password = value
         else:
             raise ValueError("Password must not be empty.")
+
+    @property
+    def roles(self):
+        return self._roles
+
+    @roles.setter
+    def roles(self, roles):
+        self._roles = roles
