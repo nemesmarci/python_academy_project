@@ -79,3 +79,11 @@ class Document(object):
 
     def make_private(self):
         self._is_public = False
+
+    def change_state(self, new_state):
+        possible_states = {'new':['pending'], 'pending':['accepted', 'rejected'], 'accepted':[], 'rejected':[]}
+        curr_state = self.state
+        if new_state in possible_states[curr_state]:
+            self.state = new_state
+        else:
+            raise ValueError("Invalid status change.")
