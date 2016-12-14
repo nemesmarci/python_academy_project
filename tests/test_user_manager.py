@@ -63,10 +63,10 @@ class TestUserManager(unittest.TestCase):
         self.test_user_manager.add_user(test_user4)
         user = self.test_user_manager.find_user_by_id(3)
         self.assertTrue(user.first_name == "User3")
-        user = self.test_user_manager.find_users_by_email('user4@test.org')
-        self.assertTrue(user.first_name == "User4")
-        user = self.test_user_manager.find_users_by_name(["Test","User2"])
-        self.assertTrue(user.email == "user2@test.org")
+        users = self.test_user_manager.find_users_by_email('user4@test.org')
+        self.assertTrue(users[0].first_name == "User4")
+        users = self.test_user_manager.find_users_by_name("User2")
+        self.assertTrue(users[0].email == "user2@test.org")
 
     @classmethod
     def tearDownClass(cls):

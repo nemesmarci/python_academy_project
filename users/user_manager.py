@@ -55,18 +55,24 @@ class UserManager(object):
             raise ValueError('The user id {} does not exist!'.format(user_id))
 
     def find_users_by_name(self, name):
+        users = []
         for i in storage_utils.get_user_ids(self._storage_location):
             user = self.load_user(i)
-            if user.first_name == name[1] and user.family_name == name[0]:
-                return user
-        return None
+            if name.upper() in user.first_name.upper() or name.upper() in user.family_name.upper():
+                users.append(user)
+        return users
 
     def find_users_by_email(self, email):
+        users = []
         for i in storage_utils.get_user_ids(self._storage_location):
             user = self.load_user(i)
-            if user.email == email:
-                return user
-        return None
+            if email.upper() in user.email.upper():
+                users.append(user)
+        return users
 
     def find_users_by_role(self, role):
         pass
+
+    def count_users(self):
+        ids = storage_utils.get_user_ids(self._storage_location)
+        return len(ids) if ids else 0
