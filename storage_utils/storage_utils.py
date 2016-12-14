@@ -25,3 +25,8 @@ def get_next_id(storage_path):
         last_id = max(integer_ids)
         return last_id + 1
     return 0
+
+
+def get_doc_ids(storage_path):
+    """Returns document ids in the path"""
+    return get_user_ids(storage_path)

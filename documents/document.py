@@ -5,12 +5,12 @@ class Document(object):
                         'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'bmp', 'gif',
                         'jpg', 'jpeg', 'png']
 
-    def __init__(self, title, description, author, files, doc_format):
+    def __init__(self, title, description, author, files, format):
         self.title = title
         self.description = description
         self.author = author
         self.files = files
-        self.doc_format = doc_format
+        self.format = format
         self.state = 'new'
         self._is_public = False
 
@@ -31,7 +31,10 @@ class Document(object):
 
     @description.setter
     def description(self, value):
-        self._description = value
+        if value:
+            self._description = value
+        else:
+            raise ValueError("Description must not be empty.")
 
     @property
     def author(self):
@@ -39,7 +42,10 @@ class Document(object):
 
     @author.setter
     def author(self, value):
-        self._author = value
+        if value:
+            self._author = value
+        else:
+            raise ValueError("Author must not be empty.")
 
     @property
     def files(self):
@@ -47,7 +53,10 @@ class Document(object):
 
     @files.setter
     def files(self, value):
-        self._files = value
+        if value:
+            self._files = value
+        else:
+            raise ValueError("Files list must not be empty.")
 
     @property
     def state(self):
@@ -61,11 +70,11 @@ class Document(object):
             raise ValueError('The "{}" is an invalid document state!'.format(value))
 
     @property
-    def doc_format(self):
+    def format(self):
         return self._doc_format
 
-    @doc_format.setter
-    def doc_format(self, value):
+    @format.setter
+    def format(self, value):
         if value in Document.accepted_formats:
             self._doc_format = value
         else:
