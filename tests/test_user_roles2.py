@@ -10,7 +10,8 @@ class TestUserRoles(unittest.TestCase):
     """Test the user role functions"""
 
     def setUp(self):
-        os.makedirs('/tmp/edms/users')
+        if not os.path.exists('/tmp/edms/users'):
+            os.makedirs('/tmp/edms/users')
         self._user_manager = UserManager('/tmp/edms/users')
         self._role_path = '/tmp/edms/users/roles.txt'
 

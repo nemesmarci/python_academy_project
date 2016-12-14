@@ -101,4 +101,4 @@ class TestUserManager(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         if os.path.exists('/tmp/users'):
-            pass#rmtree('/tmp/users')
+            rmtree('/tmp/users')
