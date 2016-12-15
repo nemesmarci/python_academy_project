@@ -69,6 +69,14 @@ class UserManager(object):
         else:
             raise ValueError('The user id {} does not exist!'.format(user_id))
 
+    def find_user_id_by_full_name(self, first, family):
+        """Returns user id for full name"""
+        for i in storage_utils.get_user_ids(self._storage_location):
+            user = self.load_user(i)
+            if first == user.first_name and family == user.family_name:
+                return i
+        return None
+
     def find_users_by_name(self, name):
         """Return all users whose name contains the given string"""
         users = []
