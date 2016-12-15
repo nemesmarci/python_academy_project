@@ -5,12 +5,12 @@ class Document(object):
                         'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'bmp', 'gif',
                         'jpg', 'jpeg', 'png']
 
-    def __init__(self, title, description, author, files, format):
+    def __init__(self, title, description, author, files, doc_format):
         self.title = title
         self.description = description
         self.author = author
         self.files = files
-        self.format = format
+        self.doc_format = doc_format
         self.state = 'new'
         self._is_public = False
 
@@ -45,7 +45,7 @@ class Document(object):
         if type(value) == int:
             self._author = value
         else:
-            raise ValueError("Author must a user id.")
+            raise ValueError("Author must be a user id.")
 
     @property
     def files(self):
@@ -70,11 +70,11 @@ class Document(object):
             raise ValueError('The "{}" is an invalid document state!'.format(value))
 
     @property
-    def format(self):
+    def doc_format(self):
         return self._doc_format
 
-    @format.setter
-    def format(self, value):
+    @doc_format.setter
+    def doc_format(self, value):
         if value in Document.accepted_formats:
             self._doc_format = value
         else:
@@ -96,3 +96,9 @@ class Document(object):
             self.state = new_state
         else:
             raise ValueError("Invalid status change.")
+
+    def change_state_directly(self, new_state):
+        if new_state in ['new', 'pending', 'accepted', 'rejected']:
+            self.state = new_state
+        else:
+            raise ValueError("Invalid status")
