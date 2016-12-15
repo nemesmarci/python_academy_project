@@ -90,10 +90,10 @@ class TestImportExport(unittest.TestCase):
         self.assertTrue(os.path.exists('/tmp/exported_documents/part1.pdf'))
         self.assertTrue(os.path.exists('/tmp/exported_documents/part2.pdf'))
         self.assertTrue(os.path.exists('/tmp/exported_documents/data.doc'))
+        self.assertTrue(os.path.exists('/tmp/exported_documents/0.edd'))
         self.assertTrue(os.path.exists('/tmp/exported_documents/1.edd'))
-        self.assertTrue(os.path.exists('/tmp/exported_documents/2.edd'))
 
-        with open('/tmp/exported_documents/1.edd') as edd_file:
+        with open('/tmp/exported_documents/0.edd') as edd_file:
             lines = edd_file.readlines()
             self.assertIn('[document]\n', lines)
             self.assertIn('title=Some important doc\n', lines)
@@ -102,7 +102,7 @@ class TestImportExport(unittest.TestCase):
             self.assertIn('files=part1.pdf part2.pdf\n', lines)
             self.assertIn('type=pdf\n', lines)
 
-        with open('/tmp/exported_documents/2.edd') as edd_file:
+        with open('/tmp/exported_documents/1.edd') as edd_file:
             lines = edd_file.readlines()
             self.assertIn('[document]\n', lines)
             self.assertIn('title=Data report\n', lines)

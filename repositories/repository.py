@@ -25,6 +25,7 @@ from iniformat.reader import read_ini_file
 from documents.document_manager import DocumentManager
 from documents.document import Document
 from users.user_manager import UserManager
+from shutil import copy
 
 
 class Repository(object):
@@ -96,4 +97,29 @@ class Repository(object):
                     raise ValueError("Author not in the repository")
 
     def export_documents(self, doc_ids, path):
-        pass
+        docs_to_export = []
+        try:
+            for i in doc_ids:
+                document = self._document_manager.find_document_by_id(i)
+                if document.state != 'accepted' or not document.is_public():
+                    raise ValueError("Document cannot be exported")
+                else:
+                    docs_to_export.append([i, document])
+        except ValueError:
+            raise ValueError("Error during export, cancelling process")
+        if not os.path.exists(path):
+            os.makedirs(path)
+        for i, document in docs_to_export:
+            for file_name in document.files:
+                copy(os.path.join(self._document_manager.doc_folder_path(i), file_name), path)
+            author = self._user_manager.find_user_by_id(document.author)
+            doc_dict = {}
+            doc_dict['title'] = document.title
+            doc_dict['description'] = document.description
+            doc_dict['author'] = ' '.join([author.first_name, author.family_name])
+            doc_dict['files'] = ' '.join(document.files)
+            doc_dict['type'] = document.doc_format
+            edd = {'document': doc_dict}
+            write_ini_file(os.path.join(path, '{}.edd'.format(i)), edd)
+
+
