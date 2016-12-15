@@ -42,10 +42,10 @@ class Document(object):
 
     @author.setter
     def author(self, value):
-        if value:
+        if type(value) == int:
             self._author = value
         else:
-            raise ValueError("Author must not be empty.")
+            raise ValueError("Author must a user id.")
 
     @property
     def files(self):

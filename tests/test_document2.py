@@ -14,7 +14,7 @@ class TestDocument(unittest.TestCase):
         self.assertEqual(document.description, 'desc1')
         self.assertEqual(document.author, 1)
         self.assertEqual(document.files, ['1.pdf', '2.pdf'])
-        self.assertEqual(document.doc_format, 'pdf')
+        self.assertEqual(document.format, 'pdf')
 
     def test_visibility(self):
         document = Document('title1', 'desc1', 1, ['1.pdf', '2.pdf'], 'pdf')

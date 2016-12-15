@@ -14,8 +14,7 @@ class DocumentManager(object):
 
     def add_document(self, document):
         document_id = storage_utils.get_next_id(self._storage_location)
-        document_id = str(document_id)
-        doc_folder = os.path.join(self._storage_location, document_id)
+        doc_folder = os.path.join(self._storage_location, str(document_id))
         os.makedirs(doc_folder)
         for doc_file in document.files:
             shutil.copy(doc_file, doc_folder)
@@ -26,7 +25,7 @@ class DocumentManager(object):
         with open(os.path.join(self._storage_location, str(document_id)) + '.info', 'w') as info_file:
             info_file.write(document.title + '\n')
             info_file.write(document.description + '\n')
-            info_file.write(document.author + '\n')
+            info_file.write(str(document.author) + '\n')
             info_file.write(','.join(document.files) + '\n')
             info_file.write(document.format + '\n')
             info_file.write(document.state + '\n')
@@ -37,9 +36,19 @@ class DocumentManager(object):
         pass
 
     def remove_document(self, document_id):
-        pass
+        if document_id in storage_utils.get_user_ids(self._storage_location):
+            shutil.rmtree(os.path.join(self._storage_location, str(document_id)))
+            os.remove(os.path.join(self._storage_location, str(document_id)) + '.info')
+        else:
+            raise ValueError("Invalid document id")
 
     def list_documents(self):
+        pass
+
+    def find_document_by_id(self, document_id):
+        pass
+
+    def find_documents_by_title(self, title):
         pass
 
     def find_documents_by_name(self, name):
@@ -49,4 +58,7 @@ class DocumentManager(object):
         pass
 
     def find_documents_by_format(self, format):
+        pass
+
+    def count_documents(self):
         pass
