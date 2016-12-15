@@ -30,3 +30,8 @@ def get_next_id(storage_path):
 def get_doc_ids(storage_path):
     """Returns document ids in the path"""
     return get_user_ids(storage_path)
+
+
+def get_proj_ids(storage_path):
+    """Returns project ids in the path"""
+    return get_user_ids(storage_path)
