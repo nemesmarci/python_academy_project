@@ -1,0 +1,2 @@
+class ReviewManager(object):
+    pass
