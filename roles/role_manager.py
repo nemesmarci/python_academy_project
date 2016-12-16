@@ -1,6 +1,9 @@
-from collections import defaultdict
-from roles.role import  Role
+"""Module for managing roles in the repository"""
+
 import os
+from collections import defaultdict
+from roles.role import Role
+
 
 class RoleManager(object):
     """Manage the user roles which are stored in a text file."""
@@ -8,7 +11,7 @@ class RoleManager(object):
     def __init__(self, storage_location):
         self._storage_location = storage_location
         if not os.path.exists(self._storage_location):
-            with open(self._storage_location, 'w') as role_file:
+            with open(self._storage_location, 'w'):
                 os.utime(self._storage_location, None)
 
     def read_roles(self):
@@ -36,5 +39,5 @@ class RoleManager(object):
             for user in user_roles:
                 str_roles = []
                 for role in user_roles[user]:
-                    str_roles += [role._role]
+                    str_roles += [role.role]
                 role_file.write("{}: {}\n".format(user, ",".join(str_roles)))

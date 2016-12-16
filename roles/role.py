@@ -1,3 +1,6 @@
+"""Role module"""
+
+
 class Role(object):
     """Represents the roles of the users"""
 
@@ -6,6 +9,7 @@ class Role(object):
 
     @property
     def role(self):
+        """Role name"""
         return self._role
 
     @role.setter
