@@ -41,7 +41,9 @@ class Project(object):
 
     @members.setter
     def members(self, value):
-        if isinstance(value, list):
+        if not value:
+            self._members = []
+        elif isinstance(value, list):
             self._members = value
         else:
             raise ValueError("Project members must be a list")
@@ -53,7 +55,9 @@ class Project(object):
 
     @documents.setter
     def documents(self, value):
-        if isinstance(value, list):
+        if not value:
+            self._documents = []
+        elif isinstance(value, list):
             self._documents = value
         else:
             raise ValueError("Project documents must be a list")

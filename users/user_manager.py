@@ -121,7 +121,7 @@ class UserManager(object):
         with open(role_file_path) as role_file:
             if not role_file.readlines():
                 return
-        with open(role_file) as role_file:
+        with open(role_file_path) as role_file:
             user_roles = defaultdict(list)
             for line in role_file:
                 if ':' not in line:
