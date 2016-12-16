@@ -116,3 +116,8 @@ class DocumentManager(object):
         """Counts the documents"""
         ids = storage_utils.get_doc_ids(self._storage_location)
         return len(ids) if ids else 0
+
+    @property
+    def storage_location(self):
+        return self._storage_location
+

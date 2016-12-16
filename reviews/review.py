@@ -20,7 +20,7 @@ class Review(object):
             raise ValueError('Invalid request')
 
     def set_review_request_2(self, message):
-        if not self._review_request2 and self._submission and message:
+        if not self._review_request2 and self._review_request1 and message:
             self._review_request2 = message
         else:
             raise ValueError('Invalid request')
@@ -38,7 +38,8 @@ class Review(object):
             raise ValueError('Invalid request')
 
     def set_evaluation_result(self, message):
-        if not self._evaluation_result and self._review_response1 and self._review_response2 and message:
+        if not self._evaluation_result and self._review_response1 \
+                and self._review_response2 and message:
             self._evaluation_result = message
         else:
             raise ValueError('Invalid request')
