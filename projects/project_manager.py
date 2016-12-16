@@ -1,9 +1,13 @@
+"""Module for managing projects in the repository"""
+
+import os
 from storage_utils import storage_utils
 from projects.project import Project
-import os
 
 
 class ProjectManager(object):
+    """Manage projects"""
+
     def __init__(self, storage_location, user_manager):
         self._storage_location = storage_location
         self._user_manager = user_manager
@@ -63,6 +67,7 @@ class ProjectManager(object):
         return projects
 
     def has_required_roles(self, project):
+        """Check if a project has the required members"""
         has_admin = False
         has_manager = False
         for user_id in project.members:

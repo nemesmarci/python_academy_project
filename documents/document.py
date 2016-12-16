@@ -2,7 +2,7 @@
 
 
 class Document(object):
-    """Document of the repository"""
+    """Represents a document in the repository"""
 
     accepted_formats = ['txt', 'html', 'pdf', 'odt', 'ods', 'odp', 'doc',
                         'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'bmp', 'gif',
