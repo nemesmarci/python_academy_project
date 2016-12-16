@@ -1,8 +1,10 @@
+"""Module for managing users in the repository"""
+
 import os
-from storage_utils import storage_utils
-from users.user import User
 from datetime import datetime
 from collections import defaultdict
+from storage_utils import storage_utils
+from users.user import User
 from roles.role import Role
 from roles.role_manager import RoleManager
 
@@ -103,7 +105,7 @@ class UserManager(object):
         user_roles = self._role_manager.read_roles()
         for user_id in user_roles:
             for user_role in user_roles[user_id]:
-                if role == user_role._role:
+                if role == user_role.role:
                     user = self.load_user(user_id)
                     users.append(user)
         return users
@@ -114,14 +116,14 @@ class UserManager(object):
         return len(ids) if ids else 0
 
     @staticmethod
-    def check_role_file(role_file):
+    def check_role_file(role_file_path):
         """Check a role files syntax """
-        with open(role_file) as rf:
-            if not rf.readlines():
+        with open(role_file_path) as role_file:
+            if not role_file.readlines():
                 return
-        with open(role_file) as rf:
+        with open(role_file) as role_file:
             user_roles = defaultdict(list)
-            for line in rf:
+            for line in role_file:
                 if ':' not in line:
                     raise ValueError("Invalid role file, missing colon in {}".format(line))
                 line_parts = line.split(':')
@@ -133,16 +135,24 @@ class UserManager(object):
                     if user_id not in user_roles:
                         user_roles[user_id] = []
                     else:
-                        raise ValueError("Invalid role file, duplicated user identifier: {} in {}".format(user_id, line))
+                        raise ValueError(
+                            "Invalid role file, duplicated user identifier: {} in {}"
+                            .format(user_id, line))
                     for role in roles:
                         if not role:
-                            raise ValueError("Invalid role file, too many commas in {}".format(line))
+                            raise ValueError(
+                                "Invalid role file, too many commas in {}"
+                                .format(line))
                         if role not in ['admin', 'manager', 'author', 'reviewer', 'visitor']:
-                            raise ValueError("Invalid role file, {} is not a valid role in {}".format(role, line))
+                            raise ValueError(
+                                "Invalid role file, {} is not a valid role in {}"
+                                .format(role, line))
                         if role not in user_roles[user_id]:
                             user_roles[user_id] += [role]
                         else:
-                            raise ValueError("Invalid role file, duplicated role: {} in {}".format(role, line))
+                            raise ValueError(
+                                "Invalid role file, duplicated role: {} in {}"
+                                .format(role, line))
                 except ValueError:
                     raise ValueError("Invalid role file.")
 
@@ -161,17 +171,18 @@ class UserManager(object):
             raise ValueError("Invalid role: {}".format(role))
         user = self.load_user(user_id)
         for user_role in user.roles:
-            if role == user_role._role:
+            if role == user_role.role:
                 return True
         return False
 
     def remove_role(self, user_id, role):
+        """Remove role from user"""
         if role not in ['admin', 'manager', 'author', 'reviewer', 'visitor']:
             raise ValueError("Invalid role: {}".format(role))
         user = self.load_user(user_id)
         new_roles = []
         for user_role in user.roles:
-            if role == user_role._role:
+            if role == user_role.role:
                 pass
             else:
                 new_roles += role
