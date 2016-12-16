@@ -1,6 +1,7 @@
 """Repository
 
-The repository is in a dedicated directory. This directory contains the following subdirectories by default:
+The repository is in a dedicated directory.
+This directory contains the following subdirectories by default:
 
     documents/        - document data and metadata files
     logs/             - logs of the repository events
@@ -11,21 +12,22 @@ The repository is in a dedicated directory. This directory contains the followin
 
 The documents directory contains subdirectories which name is the document identifier.
 
-For document metadata we save them to text files with the same name and .info extension next to the directories.
+For document metadata we save them to text files with the same name
+and .info extension next to the directories.
 
 The paths.ini file contains the (relative or absolute) paths of mentioned subdirectories.
 
 The roles.txt contains the user ids and the list of assigned roles.
 """
 
-from datetime import datetime
 import os
+from shutil import copy
+from datetime import datetime
 from iniformat.writer import write_ini_file
 from iniformat.reader import read_ini_file
 from documents.document_manager import DocumentManager
 from documents.document import Document
 from users.user_manager import UserManager
-from shutil import copy
 
 
 class Repository(object):
@@ -58,7 +60,7 @@ class Repository(object):
         for dir_name in ['documents', 'logs', 'projects', 'users']:
             os.makedirs('{}/{}'.format(self._location, dir_name))
         role_file_path = '{}/roles.txt'.format(self._location)
-        with open(role_file_path, 'w') as role_file:
+        with open(role_file_path, 'w'):
             os.utime(role_file_path, None)
         self.create_default_path_file()
         self._doc_path = 'documents'
@@ -68,6 +70,7 @@ class Repository(object):
         self._creation_date = datetime.now()
 
     def create_default_path_file(self):
+        """Creates an ini file with the default path settings"""
         data = {
             'directories': {
                 'documents': 'documents',
@@ -79,6 +82,7 @@ class Repository(object):
         write_ini_file('{}/paths.ini'.format(self._location), data)
 
     def import_documents(self, path):
+        """Import documents from the given directory"""
         if not os.path.exists(path):
             raise ValueError('Invalid path')
         for file_name in os.listdir(path):
@@ -88,7 +92,8 @@ class Repository(object):
                 doc_dict = edd['document']
                 author_first_name, author_family_name = doc_dict['author'].split()
                 doc_files = [os.path.join(path, x) for x in doc_dict['files'].split()]
-                author_id = self._user_manager.find_user_id_by_full_name(author_first_name, author_family_name)
+                author_id = self._user_manager.find_user_id_by_full_name(
+                    author_first_name, author_family_name)
                 if author_id is not None:
                     document = Document(doc_dict['title'], doc_dict['description'],
                                         author_id, doc_files, doc_dict['type'])
@@ -97,6 +102,7 @@ class Repository(object):
                     raise ValueError("Author not in the repository")
 
     def export_documents(self, doc_ids, path):
+        """Exports documents to the given directory"""
         docs_to_export = []
         try:
             for i in doc_ids:
@@ -121,5 +127,3 @@ class Repository(object):
             doc_dict['type'] = document.doc_format
             edd = {'document': doc_dict}
             write_ini_file(os.path.join(path, '{}.edd'.format(i)), edd)
-
-
