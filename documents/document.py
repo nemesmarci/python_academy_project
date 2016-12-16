@@ -1,3 +1,6 @@
+"""Document module"""
+
+
 class Document(object):
     """Document of the repository"""
 
@@ -16,6 +19,7 @@ class Document(object):
 
     @property
     def title(self):
+        """Document title"""
         return self._title
 
     @title.setter
@@ -27,6 +31,7 @@ class Document(object):
 
     @property
     def description(self):
+        """Document description"""
         return self._description
 
     @description.setter
@@ -38,17 +43,19 @@ class Document(object):
 
     @property
     def author(self):
+        """Id of documents author"""
         return self._author
 
     @author.setter
     def author(self, value):
-        if type(value) == int:
+        if isinstance(value, int):
             self._author = value
         else:
             raise ValueError("Author must be a user id.")
 
     @property
     def files(self):
+        """Files of the document"""
         return self._files
 
     @files.setter
@@ -60,6 +67,7 @@ class Document(object):
 
     @property
     def state(self):
+        """State of the document"""
         return self._state
 
     @state.setter
@@ -71,6 +79,7 @@ class Document(object):
 
     @property
     def doc_format(self):
+        """Format of the document"""
         return self._doc_format
 
     @doc_format.setter
@@ -81,16 +90,21 @@ class Document(object):
             raise ValueError("File format '{}' is not accepted.".format(value))
 
     def is_public(self):
+        """Returns if the document is public"""
         return self._is_public
 
     def make_public(self):
+        """Makes the document public"""
         self._is_public = True
 
     def make_private(self):
+        """Makes the document private"""
         self._is_public = False
 
     def change_state(self, new_state):
-        possible_states = {'new':['pending'], 'pending':['accepted', 'rejected'], 'accepted':[], 'rejected':[]}
+        """Changes the state of the document"""
+        possible_states = {'new':['pending'], 'pending':['accepted', 'rejected'],
+                           'accepted':[], 'rejected':[]}
         curr_state = self.state
         if new_state in possible_states[curr_state]:
             self.state = new_state
@@ -98,6 +112,7 @@ class Document(object):
             raise ValueError("Invalid status change.")
 
     def change_state_directly(self, new_state):
+        """Changes the state if the document regardless of the precvious state, used for loading"""
         if new_state in ['new', 'pending', 'accepted', 'rejected']:
             self.state = new_state
         else:
