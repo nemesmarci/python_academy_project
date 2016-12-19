@@ -1,0 +1,17 @@
+<html>
+    <body>
+        <h1>{{ title }}</h1>
+        <p>{{ description }}</p>
+        <p>author: {{ author }}</p>
+        files:
+        <ul>
+        {% for file in files %}
+            <li>{{ file }}</li>
+        {% endfor %}
+        </ul>
+        <p>format: {{ doc_format }}</p>
+        <p>state: {{ state }}</p>
+        <p>is public: {{ is_public }}</p>
+        <a href="/repos/{{ repo_name }}">back</a>
+    </body>
+</html>

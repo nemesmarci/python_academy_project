@@ -28,7 +28,8 @@ class TestReviewManager(unittest.TestCase):
         os.makedirs('/tmp/edms/documents')
         os.makedirs('/tmp/edms/reviews')
         os.makedirs('/tmp/edms/samples')
-        stages = ['submission', 'request_1', 'request_2', 'response_1', 'response_2', 'evaluation_result']
+        stages = ['submission', 'request_1', 'request_2', 'response_1',
+                  'response_2', 'evaluation_result']
         for stage in stages:
             with open('/tmp/edms/samples/{}.pdf'.format(stage), 'w') as stage_file:
                 stage_file.write('Sample {} file'.format(stage))
@@ -36,13 +37,16 @@ class TestReviewManager(unittest.TestCase):
     def create_manager_objects(self):
         self._user_manager = UserManager('/tmp/edms/users')
         self._document_manager = DocumentManager('/tmp/edms/documents')
-        self._review_manager = ReviewManager('/tmp/edms/reviews', self._user_manager, self._document_manager)
+        self._review_manager = ReviewManager('/tmp/edms/reviews',
+                                             self._user_manager, self._document_manager)
 
     def create_participants(self):
         author = User('Author', 'Test', date(1980, 10, 1), 'author.test@mail.com', 'author')
         manager = User('Manager', 'Test', date(1985, 10, 1), 'manager.test@mail.com', 'manager')
-        reviewer_1 = User('Reviewer1', 'Test', date(1985, 1, 1), 'reviewer1.test@mail.com', 'reviewer')
-        reviewer_2 = User('Reviewer2', 'Test', date(1985, 1, 2), 'reviewer2.test@mail.com', 'reviewer')
+        reviewer_1 = User('Reviewer1', 'Test', date(1985, 1, 1),
+                          'reviewer1.test@mail.com', 'reviewer')
+        reviewer_2 = User('Reviewer2', 'Test', date(1985, 1, 2),
+                          'reviewer2.test@mail.com', 'reviewer')
         self._author_id = self._user_manager.add_user(author)
         self._manager_id = self._user_manager.add_user(manager)
         self._reviewer_1_id = self._user_manager.add_user(reviewer_1)

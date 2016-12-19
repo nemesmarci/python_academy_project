@@ -14,7 +14,7 @@ class TestRepositoryManager(unittest.TestCase):
         with open('/tmp/repos/repolist', 'w') as repo_list:
             repo_list.write('/tmp/repos/repo1\n')
             repo_list.write('/tmp/repos/repo2\n')
-        self._repo_manager.load_repos('/tmp/repos/repolist')
+        self._repo_manager.load_repos('/tmp/repos')
         self.assertTrue(os.path.exists('/tmp/repos/repo1'))
         self.assertTrue(os.path.exists('/tmp/repos/repo2'))
         rmtree('/tmp/repos')

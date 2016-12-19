@@ -1,0 +1,10 @@
+<html>
+    <body>
+        {% for doc in docs %}
+        <ul>
+            <li><a href="/repos/{{ repo_name }}/{{ doc }}">{{ doc }}</a></li>
+        </ul>
+        {% endfor %}
+        <a href="/repos">back</a>
+    </body>
+</html>
