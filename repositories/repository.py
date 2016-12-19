@@ -21,13 +21,14 @@ The roles.txt contains the user ids and the list of assigned roles.
 """
 
 import os
-from shutil import copy
+import shutil
 from datetime import datetime
 from iniformat.writer import write_ini_file
 from iniformat.reader import read_ini_file
 from documents.document_manager import DocumentManager
 from documents.document import Document
 from users.user_manager import UserManager
+from reports.report import Report
 
 
 class Repository(object):
@@ -59,7 +60,7 @@ class Repository(object):
         os.makedirs(self._location)
         for dir_name in ['documents', 'logs', 'projects', 'users']:
             os.makedirs('{}/{}'.format(self._location, dir_name))
-        role_file_path = '{}/roles.txt'.format(self._location)
+        role_file_path = '{}/users/roles.txt'.format(self._location)
         with open(role_file_path, 'w'):
             os.utime(role_file_path, None)
         self.create_default_path_file()
@@ -117,7 +118,8 @@ class Repository(object):
             os.makedirs(path)
         for i, document in docs_to_export:
             for file_name in document.files:
-                copy(os.path.join(self._document_manager.doc_folder_path(i), file_name), path)
+                shutil.copy(os.path.join(
+                    self._document_manager.doc_folder_path(i), file_name), path)
             author = self._user_manager.find_user_by_id(document.author)
             doc_dict = {}
             doc_dict['title'] = document.title
@@ -127,3 +129,61 @@ class Repository(object):
             doc_dict['type'] = document.doc_format
             edd = {'document': doc_dict}
             write_ini_file(os.path.join(path, '{}.edd'.format(i)), edd)
+
+    def create_backup(self, backup_name):
+        """Creates a backup of the repository"""
+        backup_path = os.path.join(self._location, 'backups', backup_name)
+        if not os.path.exists(backup_path):
+            os.makedirs(backup_path)
+        else:
+            raise ValueError("Backup name is already in use")
+        paths_file_location = os.path.join(self._location, 'paths.ini')
+        paths = read_ini_file(paths_file_location)
+        for directory in paths['directories'].values():
+            src = os.path.join(self._location, directory)
+            dst = os.path.join(backup_path, directory)
+            shutil.copytree(src, dst)
+        with open(os.path.join(backup_path, 'backup.info'), 'w') as backup_info:
+            backup_info.write('{}\n'.format(datetime.now()))
+            n_users = self._user_manager.count_users()
+            backup_info.write('{}\n'.format(n_users))
+            n_documents = self._document_manager.count_documents()
+            backup_info.write('{}\n'.format(n_documents))
+
+    def restore_backup(self, backup_name):
+        """Restores repository from backup"""
+        backup_path = os.path.join(self._location, 'backups', backup_name)
+        if not os.path.exists(backup_path):
+            raise ValueError("Backup '{}' does not exists".format(backup_name))
+        paths_file_location = os.path.join(self._location, 'paths.ini')
+        paths = read_ini_file(paths_file_location)
+        for directory in paths['directories'].values():
+            shutil.rmtree(os.path.join(self._location, directory))
+        os.remove(paths_file_location)
+        self.create_default_path_file()
+        paths = read_ini_file(paths_file_location)
+        for directory in paths['directories'].values():
+            src = os.path.join(backup_path, directory)
+            dst = os.path.join(self._location, directory)
+            shutil.copytree(src, dst)
+
+    def show_backup_info(self, backup_name):
+        backup_path = os.path.join(self._location, 'backups', backup_name)
+        if not os.path.exists(backup_path):
+            raise ValueError("Backup '{}' does not exists".format(backup_name))
+        with open(os.path.join(backup_path, 'backup.info')) as backup_info:
+            creation_date = backup_info.readline().strip('\n')
+            n_users = int(backup_info.readline().strip('\n'))
+            n_documents = int(backup_info.readline().strip('\n'))
+            return creation_date, n_users, n_documents
+
+    def create_report(self):
+        report = Report()
+        report.user_count = self._user_manager.count_users()
+        report.document_count = self._document_manager.count_documents()
+        roles = ['admin', 'manager', 'author', 'reviewer', 'visitor']
+        users_by_role = {}
+        for role in roles:
+            users_by_role[role] = len(self._user_manager.find_users_by_role(role))
+        report.user_count_by_roles = users_by_role
+        return report
